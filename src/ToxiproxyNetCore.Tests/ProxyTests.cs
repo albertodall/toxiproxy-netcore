@@ -155,6 +155,37 @@ namespace ToxiproxyNetCore.Tests
         }
 
         [Fact]
+        public async Task CreateANewResetPeerToxicShouldWork()
+        {
+            var client = Fixture.Client;
+
+            var proxy = new Proxy
+            {
+                Name = "testingProxy",
+                Enabled = true,
+                Listen = "127.0.0.1:9090",
+                Upstream = "google.com"
+            };
+
+            var newProxy = await client.AddAsync(proxy);
+
+            var toxic = new ResetPeerToxic
+            {
+                Name = "ResetPeerToxicTest",
+            };
+            toxic.Attributes.Timeout = 5;
+            var newToxic = await newProxy.AddAsync(toxic);
+
+            // Need to retrieve the proxy and check the toxic's values
+            Assert.Equal(toxic.Name, newToxic.Name);
+            Assert.Equal(toxic.Attributes.Timeout, newToxic.Attributes.Timeout);
+
+            // Check against current toxics in the proxy
+            var currentToxics = await newProxy.GetAllToxicsAsync();
+            Assert.Contains(currentToxics, t => t.Name == toxic.Name && t.Type == "reset_peer");
+        }
+
+        [Fact]
         public async Task CreateANewBandwidthToxicShouldWork()
         {
             var client = Fixture.Client;

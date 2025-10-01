@@ -35,6 +35,8 @@ namespace Toxiproxy.Net
                     return jsonObject.ToObject<SlicerToxic>();
                 case ToxicTypenames.LimitDataToxic:
                     return jsonObject.ToObject<LimitDataToxic>();
+                case ToxicTypenames.ResetPeerToxic:
+                    return jsonObject.ToObject<ResetPeerToxic>();
                 default:
                     throw new InvalidOperationException("Unknown type: " + typeName);
             }
