@@ -11,7 +11,7 @@
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TimeoutToxic"/> class.
+        /// Initializes a new instance of the <see cref="ResetPeerToxic"/> class.
         /// </summary>
         public ResetPeerToxic()
         {
