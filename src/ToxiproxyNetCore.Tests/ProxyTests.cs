@@ -11,8 +11,10 @@ namespace ToxiproxyNetCore.Tests
     {
         public ProxyTests(ConnectionFixture fixture) : base(fixture) { }
 
-        [Fact]
-        public async Task GetAllToxicsFromAProxyShouldWork()
+        [Theory]
+        [InlineData(ToxicDirection.UpStream)]
+        [InlineData(ToxicDirection.DownStream)]
+        public async Task GetAllToxicsFromAProxyShouldWork(ToxicDirection toxicDirection)
         {
             // Add two toxics to a proxy and check if they are present in the list
             // of the toxies for the given proxy
@@ -30,7 +32,7 @@ namespace ToxiproxyNetCore.Tests
             var slicerToxic = new SlicerToxic
             {
                 Name = "SlicerToxicTest",
-                Stream = ToxicDirection.UpStream,
+                Stream = toxicDirection,
             };
             slicerToxic.Attributes.AverageSize = 10;
             slicerToxic.Attributes.Delay = 5;
@@ -63,8 +65,10 @@ namespace ToxiproxyNetCore.Tests
             Assert.Equal(slowCloseToxic.Attributes.Delay, slowCloseToxicInTheProxy.Attributes.Delay);
         }
 
-        [Fact]
-        public async Task CreateANewLatencyToxicShouldWork()
+        [Theory]
+        [InlineData(ToxicDirection.UpStream)]
+        [InlineData(ToxicDirection.DownStream)]
+        public async Task CreateANewLatencyToxicShouldWork(ToxicDirection toxicDirection)
         {
             var client = Fixture.Client;
 
@@ -81,7 +85,7 @@ namespace ToxiproxyNetCore.Tests
             var toxic = new LatencyToxic
             {
                 Name = "LatencyToxicTest",
-                Stream = ToxicDirection.UpStream
+                Stream = toxicDirection
             };
             toxic.Attributes.Jitter = 10;
             toxic.Attributes.Latency = 5;
@@ -94,8 +98,10 @@ namespace ToxiproxyNetCore.Tests
             Assert.Equal(toxic.Attributes.Latency, newToxic.Attributes.Latency);
         }
 
-        [Fact]
-        public async Task CreateANewSlowCloseToxicShouldWork()
+        [Theory]
+        [InlineData(ToxicDirection.UpStream)]
+        [InlineData(ToxicDirection.DownStream)]
+        public async Task CreateANewSlowCloseToxicShouldWork(ToxicDirection toxicDirection)
         {
             var client = Fixture.Client;
 
@@ -112,7 +118,7 @@ namespace ToxiproxyNetCore.Tests
             var toxic = new SlowCloseToxic
             {
                 Name = "SlowCloseToxicTest",
-                Stream = ToxicDirection.UpStream,
+                Stream = toxicDirection,
                 Toxicity = 0.5
             };
             toxic.Attributes.Delay = 100;
@@ -124,8 +130,10 @@ namespace ToxiproxyNetCore.Tests
             Assert.Equal(toxic.Attributes.Delay, newToxic.Attributes.Delay);
         }
 
-        [Fact]
-        public async Task CreateANewTimeoutToxicShouldWork()
+        [Theory]
+        [InlineData(ToxicDirection.UpStream)]
+        [InlineData(ToxicDirection.DownStream)]
+        public async Task CreateANewTimeoutToxicShouldWork(ToxicDirection toxicDirection)
         {
             var client = Fixture.Client;
 
@@ -142,7 +150,7 @@ namespace ToxiproxyNetCore.Tests
             var toxic = new TimeoutToxic
             {
                 Name = "TimeoutToxicTest",
-                Stream = ToxicDirection.UpStream,
+                Stream = toxicDirection,
                 Toxicity = 0.5
             };
             toxic.Attributes.Timeout = 10;
@@ -185,8 +193,10 @@ namespace ToxiproxyNetCore.Tests
             Assert.Contains(currentToxics, t => t.Name == toxic.Name && t.Type == "reset_peer");
         }
 
-        [Fact]
-        public async Task CreateANewBandwidthToxicShouldWork()
+        [Theory]
+        [InlineData(ToxicDirection.UpStream)]
+        [InlineData(ToxicDirection.DownStream)]
+        public async Task CreateANewBandwidthToxicShouldWork(ToxicDirection toxicDirection)
         {
             var client = Fixture.Client;
             var proxy = new Proxy
@@ -202,7 +212,7 @@ namespace ToxiproxyNetCore.Tests
             var toxic = new BandwidthToxic
             {
                 Name = "BandwidthToxicTest",
-                Stream = ToxicDirection.UpStream
+                Stream = toxicDirection
             };
             toxic.Attributes.Rate = 100;
             var newToxic = await newProxy.AddAsync(toxic);
@@ -213,8 +223,10 @@ namespace ToxiproxyNetCore.Tests
             Assert.Equal(toxic.Attributes.Rate, newToxic.Attributes.Rate);
         }
 
-        [Fact]
-        public async Task CreateANewSlicerToxicShouldWork()
+        [Theory]
+        [InlineData(ToxicDirection.UpStream)]
+        [InlineData(ToxicDirection.DownStream)]
+        public async Task CreateANewSlicerToxicShouldWork(ToxicDirection toxicDirection)
         {
             var client = Fixture.Client;
             var proxy = new Proxy
@@ -230,7 +242,7 @@ namespace ToxiproxyNetCore.Tests
             var toxic = new SlicerToxic
             {
                 Name = "SlicerToxicTest",
-                Stream = ToxicDirection.UpStream
+                Stream = toxicDirection
             };
             toxic.Attributes.AverageSize = 10;
             toxic.Attributes.Delay = 5;
@@ -245,8 +257,10 @@ namespace ToxiproxyNetCore.Tests
             Assert.Equal(toxic.Attributes.SizeVariation, newToxic.Attributes.SizeVariation);
         }
 
-        [Fact]
-        public async Task CreateANewLimitDataToxicShouldWork()
+        [Theory]
+        [InlineData(ToxicDirection.UpStream)]
+        [InlineData(ToxicDirection.DownStream)]
+        public async Task CreateANewLimitDataToxicShouldWork(ToxicDirection toxicDirection)
         {
             var client = Fixture.Client;
             var proxy = new Proxy
@@ -262,7 +276,7 @@ namespace ToxiproxyNetCore.Tests
             var toxic = new LimitDataToxic
             {
                 Name = "LimitDataToxicTest",
-                Stream = ToxicDirection.UpStream
+                Stream = toxicDirection
             };
             toxic.Attributes.Bytes = 512;
             var newToxic = await newProxy.AddAsync(toxic);
@@ -273,8 +287,10 @@ namespace ToxiproxyNetCore.Tests
             Assert.Equal(toxic.Attributes.Bytes, newToxic.Attributes.Bytes);
         }
 
-        [Fact]
-        public async Task AddTwoToxicWithTheSameNameShouldThrowException()
+        [Theory]
+        [InlineData(ToxicDirection.UpStream)]
+        [InlineData(ToxicDirection.DownStream)]
+        public async Task AddTwoToxicWithTheSameNameShouldThrowException(ToxicDirection toxicDirection)
         {
             var client = Fixture.Client;
             var proxy = new Proxy
@@ -290,7 +306,7 @@ namespace ToxiproxyNetCore.Tests
             var firstToxic = new SlicerToxic
             {
                 Name = "SlicerToxicTest",
-                Stream = ToxicDirection.UpStream
+                Stream = toxicDirection
             };
             firstToxic.Attributes.AverageSize = 10;
             firstToxic.Attributes.Delay = 5;
@@ -300,15 +316,17 @@ namespace ToxiproxyNetCore.Tests
             var toxicWithSameName = new SlicerToxic
             {
                 Name = firstToxic.Name,
-                Stream = ToxicDirection.UpStream
+                Stream = toxicDirection
             };
 
             await Assert.ThrowsAsync<ToxiProxiException>(
                 async () => await newProxy.AddAsync(toxicWithSameName));
         }
 
-        [Fact]
-        public async Task GetAnExistingToxicFromAProxyShouldWork()
+        [Theory]
+        [InlineData(ToxicDirection.UpStream)]
+        [InlineData(ToxicDirection.DownStream)]
+        public async Task GetAnExistingToxicFromAProxyShouldWork(ToxicDirection toxicDirection)
         {
             // Add a toxics to a proxy.
             // After reload the toxic again and check that all the properties
@@ -327,7 +345,7 @@ namespace ToxiproxyNetCore.Tests
             var toxic = new SlicerToxic
             {
                 Name = "SlicerToxicTest",
-                Stream = ToxicDirection.UpStream
+                Stream = toxicDirection
             };
             toxic.Attributes.AverageSize = 10;
             toxic.Attributes.Delay = 5;
@@ -347,8 +365,10 @@ namespace ToxiproxyNetCore.Tests
             Assert.Equal(specificToxicInProxy.Attributes.SizeVariation, toxic.Attributes.SizeVariation);
         }
 
-        [Fact]
-        public async Task DeleteAToxicShouldWork()
+        [Theory]
+        [InlineData(ToxicDirection.UpStream)]
+        [InlineData(ToxicDirection.DownStream)]
+        public async Task DeleteAToxicShouldWork(ToxicDirection toxicDirection)
         {
             // Add two toxics to a proxy.
             // After delete the first one and check that
@@ -367,7 +387,7 @@ namespace ToxiproxyNetCore.Tests
             var firstToxic = new SlicerToxic
             {
                 Name = "SlicerToxicTest",
-                Stream = ToxicDirection.UpStream
+                Stream = toxicDirection
             };
             firstToxic.Attributes.AverageSize = 10;
             firstToxic.Attributes.Delay = 5;
@@ -398,8 +418,10 @@ namespace ToxiproxyNetCore.Tests
             Assert.Equal(secondToxic.Attributes.Delay, singleToxicInProxy.Attributes.Delay);
         }
 
-        [Fact]
-        public async Task UpdatingAToxicShouldWorks()
+        [Theory]
+        [InlineData(ToxicDirection.UpStream, ToxicDirection.DownStream)]
+        [InlineData(ToxicDirection.DownStream, ToxicDirection.UpStream)]
+        public async Task UpdatingAToxicShouldWorks(ToxicDirection baseToxicDirection, ToxicDirection targetToxicDirection)
         {
             // Add a toxics to a proxy.
             // After update all the toxic's properties
@@ -419,7 +441,7 @@ namespace ToxiproxyNetCore.Tests
             var toxic = new SlicerToxic
             {
                 Name = "SlicerToxicTest",
-                Stream = ToxicDirection.UpStream
+                Stream = baseToxicDirection
             };
             toxic.Attributes.AverageSize = 10;
             toxic.Attributes.Delay = 5;
@@ -431,7 +453,7 @@ namespace ToxiproxyNetCore.Tests
 
             // Update the toxic's property
             toxicInProxy.Name = "NewName";
-            toxicInProxy.Stream = ToxicDirection.DownStream;
+            toxicInProxy.Stream = targetToxicDirection;
             toxicInProxy.Attributes.AverageSize = 20;
             toxicInProxy.Attributes.Delay = 10;
             toxicInProxy.Attributes.SizeVariation = 2;

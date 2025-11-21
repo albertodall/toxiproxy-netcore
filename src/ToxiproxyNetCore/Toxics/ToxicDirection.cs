@@ -3,7 +3,7 @@ using Newtonsoft.Json.Converters;
 
 namespace Toxiproxy.Net.Toxics
 {
-    [JsonConverter(typeof(StringEnumConverter))]
+    [JsonConverter(typeof(LowercaseStringEnumConverter))]
     public enum ToxicDirection
     {
         UpStream,
